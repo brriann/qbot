@@ -1,6 +1,6 @@
 import numpy as np
 from rlbotenv import *
-from qhwbot import *
+from qhwbot_28byj import *
 
 ################################################################################
 #                                                                              #
@@ -8,7 +8,7 @@ from qhwbot import *
 #                                                                              #
 ################################################################################
 
-e = RlBotEnv(QHwBot(3,12))
+e = RlBotEnv(QHwBot_28byj(3,12))
 
 # create the q-table
 q = np.random.rand(e.bot.observation_space(), e.bot.action_space())
