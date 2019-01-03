@@ -20,7 +20,7 @@ class DistanceSensor:
 
     def get_reading(self, position):
         self.seek_position(position)
-        return self.stepper.position, self.read_distance()
+        return self.position, self.read_distance()
 
     def read_distance(self):
         distance_in_mm = 0
@@ -50,32 +50,18 @@ class LidarSensor(DistanceSensor):
         self.motors = StepperMotors(self.pins,halfStepSequence, 0.0005)
 
     def seek_position(self, position):
-        print(position)
         current_lidar_pos = self.motors.positions[0]
         # store the position as an integer and it'll never drift
         steps = math.floor((position-current_lidar_pos)/self.motors.degrees_per_step)
-        for x in range(steps):
-            if position > 0:
-                self.motors.doStep(((1),))
-            elif position < 0:
-                self.motors.dostep(((-1),))
-            else:
-                pass
+        direction = 1 if steps > 1 else -1
+        for x in range(abs(steps)):
+            self.motors.doStep(((direction),))
         self.position = self.motors.positions[0]
         return self.motors.positions[0]
 
 
 j = LidarSensor()
-print('Seeking 30')
+j.seek_position(30)
 j.seek_position(-30)
-time.sleep(1)
-print('Seeking 60')
-j.seek_position(60)
-time.sleep(1)
-print('Seeking 90')
-j.seek_position(90)
-time.sleep(1)
-print('Seeking 0')
 j.seek_position(0)
-time.sleep(1)
 

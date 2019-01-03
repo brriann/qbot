@@ -38,9 +38,8 @@ class QHwBot_28byj(QBot):
                 self.motors.doStep((1,1))
 
     def get_distance(self):
-#        return self.lidar.get_observation()[...,1]
-#         obs = [0 for x in range(self.sensor_sectors)]
-#         return obs
+        obs = self.lidar.get_observation()[...,1]
+        return obs
 
     def reset(self):
         pass
