@@ -15,7 +15,7 @@ class StepperMotors:
     (1, 0, 0, 1)
   )
   
-  delay = 0.005
+  delay = 0.0005
 
   def __init__(self, pin_sets):
     self.pin_sets = pin_sets
