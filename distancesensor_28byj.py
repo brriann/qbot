@@ -12,11 +12,17 @@ import time
 ################################################################################
 
 class DistanceSensor:
+    
+    pins = (19,21,23,24)
 
     def __init__(self, sweep_count = 3, sweep_degrees = 30):
         self.sweep_count = sweep_count
         self.sweep_degrees = sweep_degrees
         self.position = 0.0  # 0 is forward
+        self.lidar = VL53L1X.VL53L1X(i2c_bus=1, i2c_address=0x29)
+        self.lidar.open() # Initialise the i2c bus and configure the sensor
+        self.pins = (DistanceSensor.pins,)
+        self.motors = StepperMotors((DistanceSensor.pins,),, 0.0005)
 
     def get_reading(self, position):
         self.seek_position(position)
