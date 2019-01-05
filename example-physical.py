@@ -18,7 +18,7 @@ explore = 0.1  # exploration rate (odds of taking a random action)
 alpha = 0.1    # learning rate (proportional weight of new v. old information)
 gamma = 0.9    # discount rate (relative value of future v. current reward)
 
-'''for n in range(10):
+for n in range(10):
     state = e.reset()
     done = False
     while not done:
@@ -30,4 +30,3 @@ gamma = 0.9    # discount rate (relative value of future v. current reward)
         # update the q-table (see https://en.wikipedia.org/wiki/Q-learning)
         q[state][action] = (1-alpha) * q[state][action] + alpha * (reward + gamma * np.max(q[next_state]))
         state = next_state
-'''

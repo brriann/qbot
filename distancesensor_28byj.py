@@ -15,11 +15,11 @@ class DistanceSensor:
 
     pins = (19,21,23,24)
 
-    def __init__(self):
+    def __init__(self, motor):
         self.position = 0.0  # 0 is forward
         self.lidar = VL53L1X.VL53L1X(i2c_bus=1, i2c_address=0x29)
         self.lidar.open() # Initialise the i2c bus and configure the sensor
-        self.motor = Stepper(DistanceSensor.pins)
+        self.motor = motor
 
     def get_reading(self, position):
         self.seek_position(position)
