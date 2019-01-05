@@ -15,7 +15,7 @@ class Stepper:
     (1, 0, 0, 1)
   )
   
-  delay = 0.0005
+  delay = 0.005
   degrees_per_step = 0.0875
 
   def __init__(self, pins):
@@ -28,10 +28,15 @@ class Stepper:
       GPIO.output(pin, 0)
 
   def setTarget(self, target):
-    self.target = target % 180 - 180 if target >= 0 else target % -180 + 180
+    print('Requested target:',target)
+    a = target % 360
+    self.target = a if a <= 180 else a - 360
+    print('Set target:',self.target)
+
+  def getPosition(self):
+    return self.position
 
   def hasSteps(self):
-    print(self.position, self.target, abs(self.position-self.target), Stepper.degrees_per_step)
     return abs(self.position - self.target) >= Stepper.degrees_per_step
 
   def doStep(self):
@@ -41,5 +46,4 @@ class Stepper:
       for i in range(4):
         GPIO.output(self.pins[i], self.dq[0][i])
       self.position += Stepper.degrees_per_step * direction
-
 

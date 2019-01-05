@@ -20,14 +20,3 @@ class Steppers:
         return False
 
 
-GPIO.setmode(GPIO.BOARD)
-j = Stepper((19,21,23,24))
-k = Stepper((7,11,13,15))
-j.setTarget(60)
-k.setTarget(30)
-x = Steppers((j,k))
-
-while x.hasSteps(): 
-    x.move()
-
-GPIO.cleanup()

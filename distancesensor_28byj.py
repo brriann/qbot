@@ -1,4 +1,4 @@
-from GPIO_multi_stepper import *
+from stepper import Stepper
 import numpy as np
 import VL53L1X
 import math
@@ -12,18 +12,23 @@ import time
 ################################################################################
 
 class DistanceSensor:
-    
+
     pins = (19,21,23,24)
 
     def __init__(self):
         self.position = 0.0  # 0 is forward
         self.lidar = VL53L1X.VL53L1X(i2c_bus=1, i2c_address=0x29)
         self.lidar.open() # Initialise the i2c bus and configure the sensor
-        self.motors = StepperMotors((DistanceSensor.pins,))  # ...a list of pin sets, of length 1 (only 1 motor)
+        self.motor = Stepper(DistanceSensor.pins)
 
     def get_reading(self, position):
         self.seek_position(position)
-        return self.get_position(), self.read_distance()
+        return self.motor.getPosition(), self.read_distance()
+
+    def seek_position(self, target):
+        self.motor.setTarget(target)
+        while self.motor.hasSteps():
+            self.motor.doStep()
 
     def read_distance(self):
         distance_in_mm = 0
@@ -34,27 +39,15 @@ class DistanceSensor:
         self.lidar.stop_ranging() # Stop ranging
         return distance_in_mm
 
-    def get_observation(self, count, degrees):
+    def get_observation(self, sector_count, degrees_per_sector):
         observation = []
         target = 0
-        for i in range(self.sweep_count):
+        for i in range(sector_count):
             observation.append(self.get_reading(target))
-            target += self.sweep_degrees
+            target += degrees_per_sector
         self.seek_position(0)
         return np.array(observation)
 
-    def get_position(self):
-        return self.motors.positions[0]
-    
-    def seek_position(self, position):
-        # store the position as an integer and it'll never drift
-        steps = math.floor((position-self.get_position())/self.motors.degrees_per_step)
-        direction = 1 if steps > 1 else -1
-        for x in range(abs(steps)):
-            self.motors.doStep(((direction),))
 
-j = LidarSensor()
-j.seek_position(30)
-j.seek_position(-30)
-j.seek_position(0)
+
 
