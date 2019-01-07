@@ -23,12 +23,12 @@ class DistanceSensor:
 
     def get_reading(self, position):
         self.seek_position(position)
-        return self.motor.getPosition(), self.read_distance()
+        return self.motor.get_position(), self.read_distance()
 
     def seek_position(self, target):
-        self.motor.setTarget(target)
-        while self.motor.hasSteps():
-            self.motor.doStep()
+        self.motor.set_target(target)
+        while self.motor.has_steps():
+            self.motor.do_step()
 
     def read_distance(self):
         distance_in_mm = 0

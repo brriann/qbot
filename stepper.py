@@ -19,6 +19,7 @@ class Stepper:
   degrees_per_step = 0.0875
 
   def __init__(self, pins):
+    self.target = 0
     self.pins = pins
     self.dq = deque(Stepper.halfStepSequence)
     for pin in pins:
@@ -35,13 +36,13 @@ class Stepper:
 class SeekerStepper(Stepper):
 
   def __init__(self, pins):
-    super().__init__(self, pins)
+    super().__init__(pins)
     self.position = 0.0
 
   def has_steps(self):
     return abs(self.position - self.target) >= Stepper.degrees_per_step
 
-  def get_direction():
+  def get_direction(self):
     return 1 if self.target >= self.position else -1
 
   def set_target(self, target):
@@ -52,20 +53,20 @@ class SeekerStepper(Stepper):
     return self.position
 
   def do_step(self):
-      super().do_step(self)
-      self.position += Stepper.degrees_per_step * direction
+      super().do_step()
+      self.position += Stepper.degrees_per_step * self.get_direction()
 
 class RotateStepper(Stepper):
 
   def has_steps(self):
     return abs(self.target) >= Stepper.degrees_per_step
 
-  def get_direction():
+  def get_direction(self):
     return 1 if self.target > 0.0 else -1
 
-  def set_rotation(self, degrees):
+  def set_target(self, degrees):
     self.target = degrees
 
   def do_step(self):
-      super().do_step(self)
+      super().do_step()
       self.target -= Stepper.degrees_per_step * self.get_direction()
