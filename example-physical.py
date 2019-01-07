@@ -30,3 +30,4 @@ for n in range(10):
         # update the q-table (see https://en.wikipedia.org/wiki/Q-learning)
         q[state][action] = (1-alpha) * q[state][action] + alpha * (reward + gamma * np.max(q[next_state]))
         state = next_state
+    print(q)

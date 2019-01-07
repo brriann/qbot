@@ -34,6 +34,10 @@ class Stepper:
   def getPosition(self):
     return self.position
 
+  def rezero(self):
+    self.position = 0
+    self.target = 0
+
   def hasSteps(self):
     return abs(self.position - self.target) >= Stepper.degrees_per_step
 

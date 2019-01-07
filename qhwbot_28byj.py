@@ -33,8 +33,8 @@ class QHwBot_28byj(QBot):
         travel_duration = 90                              #forward moves are a 90 degree rotation of both wheels
         if action == 0:
             #go forward
-            self.stepper1.setTarget(self.stepper1.getPosition()+rotation_degrees)
-            self.stepper2.setTarget(self.stepper2.getPosition()-rotation_degrees)
+            self.stepper1.setTarget(self.stepper1.getPosition()+travel_duration)
+            self.stepper2.setTarget(self.stepper2.getPosition()-travel_duration)
         elif action == 1:
             #turn left
             self.stepper1.setTarget(self.stepper1.getPosition()+rotation_degrees)
@@ -44,6 +44,8 @@ class QHwBot_28byj(QBot):
             self.stepper1.setTarget(self.stepper1.getPosition()-rotation_degrees)
             self.stepper2.setTarget(self.stepper2.getPosition()-rotation_degrees)
         self.moveMotors()
+        self.stepper1.rezero()
+        self.stepper2.rezero()
 
     def moveMotors(self):
         while self.motors.hasSteps():
@@ -52,11 +54,8 @@ class QHwBot_28byj(QBot):
     def get_observation(self, sector_count, degrees_per_sector):
         observation = []
         target = -(sector_count-1)//2 * degrees_per_sector
-        print("Initial target: ", target)
         for i in range(sector_count):
-            print('Position = ', self.stepper3.getPosition())
             self.stepper3.setTarget(target)
-            print('Target = ', target)
             self.moveMotors()
             observation.append(self.lidar.get_reading(target))
             target += (degrees_per_sector)
