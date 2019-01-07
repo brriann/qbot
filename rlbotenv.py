@@ -19,13 +19,13 @@ class RlBotEnv:
 
     def reset(self):
         self.bot.reset()
-        obs = self.bot.get_distance()   # returns continous distances
+        obs = self.bot.get_observation(self.bot.sensor_sectors, self.bot.sensor_sector_degrees)[...,1]   # returns continous distances
         self.min_distance = min(obs)    # for use in first call to step()
         return np.argmin(obs)           # convert to discrete observation
 
     def step(self, action):
         self.bot.move(action)
-        obs = self.bot.get_distance()        # get continous distances
+        obs = self.bot.get_observation(self.bot.sensor_sectors, self.bot.sensor_sector_degrees)[...,1]   # returns continous distances
         reward = self.min_distance-min(obs)  # reward = reduction in distance
         self.min_distance = min(obs)         # for use in next call to step()
         state = np.argmin(obs)               # convert to discrete state

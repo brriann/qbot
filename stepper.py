@@ -15,23 +15,21 @@ class Stepper:
     (1, 0, 0, 1)
   )
   
-  delay = 0.005
+  delay = 0.001
   degrees_per_step = 0.0875
 
   def __init__(self, pins):
     self.pins = pins
     self.position = 0.0
-    self.target = None
+    self.target = 0
     self.dq = deque(Stepper.halfStepSequence)
     for pin in pins:
       GPIO.setup(pin, GPIO.OUT)
       GPIO.output(pin, 0)
 
   def setTarget(self, target):
-    print('Requested target:',target)
     a = target % 360
     self.target = a if a <= 180 else a - 360
-    print('Set target:',self.target)
 
   def getPosition(self):
     return self.position

@@ -39,14 +39,6 @@ class DistanceSensor:
         self.lidar.stop_ranging() # Stop ranging
         return distance_in_mm
 
-    def get_observation(self, sector_count, degrees_per_sector):
-        observation = []
-        target = 0
-        for i in range(sector_count):
-            observation.append(self.get_reading(target))
-            target += degrees_per_sector
-        self.seek_position(0)
-        return np.array(observation)
 
 
 

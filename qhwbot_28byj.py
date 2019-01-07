@@ -51,15 +51,19 @@ class QHwBot_28byj(QBot):
 
     def get_observation(self, sector_count, degrees_per_sector):
         observation = []
-        target = -(sector_count-1)//2
-        for i in range(self.sensor_sectors):
-            observation.append(lidar.get_reading(target))
-            target += (degrees_per_sector)
+        target = -(sector_count-1)//2 * degrees_per_sector
+        print("Initial target: ", target)
+        for i in range(sector_count):
+            print('Position = ', self.stepper3.getPosition())
             self.stepper3.setTarget(target)
+            print('Target = ', target)
             self.moveMotors()
+            observation.append(self.lidar.get_reading(target))
+            target += (degrees_per_sector)
+        return np.array(observation)
 
     def get_distance(self):
-        obs = self.get_observation(self.sensor_sectors, self.sensor_sector_degrees)[...,1]
+        obs = self.get_observation(self.sensor_sectors, self.sensor_sector_degrees)#[...,1]
         return obs
 
     def reset(self):
