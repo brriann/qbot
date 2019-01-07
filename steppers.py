@@ -8,15 +8,11 @@ class Steppers:
         self.motors = motors
 
     def move(self):
-        if self.hasSteps():
+        done = False
+        while not done:
+            done = True                     # speculative
             for motor in self.motors:
-                motor.doStep()
-        time.sleep(Stepper.delay)
-
-    def hasSteps(self):
-        for motor in self.motors:
-            if motor.hasSteps():
-                return True
-        return False
-
-
+                if motor.has_steps():
+                    motor.do_step()
+                    done = False            # not really done!
+            time.sleep(Stepper.delay)
