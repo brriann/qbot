@@ -15,7 +15,7 @@ class Stepper:
     (1, 0, 0, 1)
   )
 
-  delay = 0.001
+  delay = 0.0009
   degrees_per_step = 0.0875
 
   def __init__(self, pins):

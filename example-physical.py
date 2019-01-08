@@ -8,10 +8,11 @@ from qhwbot_28byj import *
 #                                                                              #
 ################################################################################
 
-e = RlBotEnv(QHwBot_28byj(3,12))
+e = RlBotEnv(QHwBot_28byj(12,6,30))
 
 # create the q-table
-q = np.random.rand(e.bot.observation_space(), e.bot.action_space())
+#q = np.random.rand(e.bot.observation_space(), e.bot.action_space())
+q = np.zeros((e.bot.observation_space(), e.bot.action_space()))
 
 # try changing these hyper-parameters...
 explore = 0.1  # exploration rate (odds of taking a random action)
@@ -30,4 +31,3 @@ for n in range(10):
         # update the q-table (see https://en.wikipedia.org/wiki/Q-learning)
         q[state][action] = (1-alpha) * q[state][action] + alpha * (reward + gamma * np.max(q[next_state]))
         state = next_state
-    print(q)

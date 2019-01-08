@@ -20,6 +20,7 @@ class QHwBot_28byj(QBot):
         self.sensor_sectors = sensor_sectors
         self.turn_sectors = turn_sectors
         self.sensor_sector_degrees = sensor_sector_degrees
+        self.tuning_coeff = 1.555
         self.stepper1 = RotateStepper((7,11,13,15))
         self.stepper2 = RotateStepper((31,33,35,37))
         self.stepper3 = SeekerStepper((19,21,23,24))
@@ -27,12 +28,12 @@ class QHwBot_28byj(QBot):
         self.lidar = DistanceSensor(self.stepper3)
 
     def move(self, action):
-        rotation_degrees = 360/self.turn_sectors          # turns are proportional to turn sectors defined above
-        travel_duration = 90                              # forward moves are a 90 degree rotation of both wheels
+        rotation_degrees = 360/self.turn_sectors * self.tuning_coeff  # turns are proportional to turn sectors defined above
+        travel_duration = 90                                     # forward moves are a 90 degree rotation of both wheels
         if action == 0:
             #go forward
-            self.stepper1.set_target(travel_duration)
-            self.stepper2.set_target(-travel_duration)
+            self.stepper1.set_target(-travel_duration)
+            self.stepper2.set_target(travel_duration)
         elif action == 1:
             #turn left
             self.stepper1.set_target(rotation_degrees)
