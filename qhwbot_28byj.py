@@ -15,11 +15,11 @@ from distancesensor_28byj import *
 ################################################################################
 
 class QHwBot_28byj(QBot):
-    def __init__(self, sensor_sectors=4, turn_sectors=4, sensor_sector_degrees=30):
+    def __init__(self, sensor_sectors=4, turn_sectors=4, degrees_per_sector=30):
         GPIO.setmode(GPIO.BOARD)
         self.sensor_sectors = sensor_sectors
         self.turn_sectors = turn_sectors
-        self.sensor_sector_degrees = sensor_sector_degrees
+        self.degrees_per_sector = degrees_per_sector
         self.tuning_coeff = 1.555
         self.stepper1 = RotateStepper((7,11,13,15))
         self.stepper2 = RotateStepper((31,33,35,37))
@@ -44,19 +44,15 @@ class QHwBot_28byj(QBot):
             self.stepper2.set_target(-rotation_degrees)
         self.motors.move()
 
-    def get_observation(self, sector_count, degrees_per_sector):
+    def get_observation(self):
         observation = []
-        target = -(sector_count-1)//2 * degrees_per_sector
+        target = -(self.sensor_sectors-1)//2 * self.degrees_per_sector
         for i in range(sector_count):
             self.stepper3.set_target(target)
             self.motors.move()
-            observation.append(self.lidar.get_reading(target))
-            target += (degrees_per_sector)
+            observation.append(self.lidar.get_reading(target)[1])  # 1-th element is distance
+            target += self.degrees_per_sector
         return np.array(observation)
-
-    def get_distance(self):
-        obs = self.get_observation(self.sensor_sectors, self.sensor_sector_degrees)#[...,1]
-        return obs
 
     def reset(self):
         pass
