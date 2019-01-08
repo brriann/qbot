@@ -47,7 +47,7 @@ class QHwBot_28byj(QBot):
     def get_observation(self):
         observation = []
         target = -(self.sensor_sectors-1)//2 * self.degrees_per_sector
-        for i in range(sector_count):
+        for i in range(self.sensor_sectors):
             self.stepper3.set_target(target)
             self.motors.move()
             observation.append(self.lidar.get_reading(target)[1])  # 1-th element is distance
