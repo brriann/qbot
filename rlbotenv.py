@@ -1,5 +1,6 @@
 import math
 import numpy as np
+from obstacle import Obstacle
 
 ################################################################################
 #                                                                              #
@@ -17,15 +18,16 @@ class RlBotEnv:
     def __init__(self, bot):
         self.bot = bot        # could be a physical or virtual robot
 
-    def reset(self):
+    def reset(self, obstacle_count=0):
         self.bot.reset()
-        obs = self.bot.get_observation()    # axis 1 contains distance
-        self.min_distance = min(obs)        # for use in first call to step()
-        return np.argmin(obs)               # convert to discrete observation
+        self.obstacles = Obstacle.make_obstacles(obstacle_count)
+        obs = self.bot.get_observation(self.obstacles)
+        self.min_distance = min(obs)                    # for use in first call to step()
+        return np.argmin(obs)                           # convert to discrete observation
 
     def step(self, action):
         self.bot.move(action)
-        obs = self.bot.get_observation()    # axis 1 contains distance
+        obs = self.bot.get_observation(self.obstacles)
         reward = self.min_distance-min(obs) # reward = reduction in distance
         self.min_distance = min(obs)        # for use in next call to step()
         state = np.argmin(obs)              # convert to discrete state

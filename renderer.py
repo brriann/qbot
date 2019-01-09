@@ -19,17 +19,17 @@ class Renderer:
         turtle.clear()
         self.count = -1
 
-    def render_reset(self, environment):
+    def render_reset(self, env):
         self.count += 1
-        self.render_backdrop(environment.bot)
+        self.render_backdrop(env.obstacles, env.bot)
 
-    def render_backdrop(self, bot):
+    def render_backdrop(self, obstacles, bot):
         if self.count % self.n == 0:
             turtle.hideturtle()
             turtle.colormode(255)
             turtle.pencolor((np.random.randint(255),np.random.randint(255),np.random.randint(255)))
             turtle.pensize(3+np.random.randint(5))
-            for o in bot.obstacles:
+            for o in obstacles:
                 self.render_obstacle(o)
             turtle.penup()
             turtle.goto(bot.x, bot.y)
@@ -49,7 +49,7 @@ class Renderer:
         turtle.hideturtle()
         turtle.goto(env.bot.x, env.bot.y)
         turtle.showturtle()
-        for o in self.obstacles:
+        for o in env.obstacles:
             a,b,m,n = env.bot.bearings_to_ob(o)
             d = env.bot.distance_to_ob(o)
             env.render_reset_turtle()

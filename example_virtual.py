@@ -8,9 +8,8 @@ from renderer import Renderer
 #                                                                              #
 ################################################################################
 
-e = RlBotEnv(QvBot(3,12))  # sensor reads @ 360/3=120 degrees per reading
-                           # robot turns @ 360/12=30 degrees per turn
-r = Renderer(10)           # update screen every 10 iterations
+e = RlBotEnv(QvBot())                       
+r = Renderer(10)
 
 # create the q-table
 q = np.random.rand(e.bot.observation_space(), e.bot.action_space())
@@ -21,7 +20,7 @@ alpha = 0.1     # learning rate (proportional weight of new v. old information)
 gamma = 0.9     # discount rate (relative value of future v. current reward)
 
 for n in range(1000):
-    state = e.reset()
+    state = e.reset(obstacle_count=1)
     r.render_reset(e)
     done = False
     while not done:

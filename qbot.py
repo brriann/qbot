@@ -12,8 +12,14 @@ import numpy as np
 ################################################################################
 
 class QBot:
+
+    def __init__(self, sensor_sectors, degrees_per_sensor_sector, turn_sectors):
+        self.sensor_sectors = sensor_sectors
+        self.degrees_per_sensor_sector = degrees_per_sensor_sector
+        self.turn_sectors = turn_sectors
+
     def action_space(self):         # forward, turn left, turn right
-        return 3                    # change this if your robot has more moves!
+        return 3                    # turn left, turn right, move forward
 
     def observation_space(self):
         return self.sensor_sectors  # the number of sensor readings per sweep

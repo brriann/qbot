@@ -1,22 +1,18 @@
 import math
-from obstacle import Obstacle
 import numpy as np
 from qbot import QBot
 
 ################################################################################
 #                                                                              #
-# Virtual Robot: warning! uses high-school trigonometry!                       #
+#  Virtual Robot: warning! uses high-school trigonometry!                      #
 #                                                                              #
 ################################################################################
 
 class QvBot(QBot):
-    def __init__(self, sensor_sectors=12, turn_sectors=4, obstacle_count=1):
-        self.sensor_sectors = sensor_sectors
-        self.sensor_sector_degrees = 360.0 / sensor_sectors
-        self.sensor_fov = math.pi*2.0/self.sensor_sectors
-        self.turn_sectors = turn_sectors
+    def __init__(self, sensor_sectors=12, degrees_per_sensor_sector = 30, turn_sectors=4):
+        super().__init__(sensor_sectors, degrees_per_sensor_sector, turn_sectors)
+        self.sensor_fov = 2.0*math.pi*degrees_per_sensor_sector/360.0
         self.sensor_range = 4000
-        self.obstacle_count = obstacle_count
         self.reset()
 
     def reset(self):
@@ -24,7 +20,6 @@ class QvBot(QBot):
         self.y = 0
         self.heading = 0  # points directly to the right -->
         self.n_heading = 0 # eliminates rounding error
-        self.obstacles = Obstacle.make_obstacles(self.obstacle_count)
 
     def move(self, action):
         if action == 0:
@@ -75,13 +70,13 @@ class QvBot(QBot):
         theta = theta if theta > -math.pi else theta+2*math.pi
         return theta
 
-    def get_observation(self):
+    def get_observation(self, obstacles):
         ranges = []
-        for n in range(self.sensor_sectors):
+        for n in range(-self.sensor_sectors//2,self.sensor_sectors//2,1):
             min_range = self.sensor_range
             sensor_bearing = n * self.sensor_fov + self.heading
             sensor_bearing = sensor_bearing if sensor_bearing < math.pi*2 else sensor_bearing-math.pi*2
-            for ob in self.obstacles:
+            for ob in obstacles:
                 left, right, _0, _1 = self.bearings_to_ob(ob, sensor_bearing)
                 left_edge = abs(left) < self.sensor_fov/2
                 right_edge = abs(right) < self.sensor_fov/2
