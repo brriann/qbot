@@ -6,7 +6,7 @@ from qhwbot_28byj import *
 ########### Train virtually, then run physically ###############################
 
 ########### Train the q-table using a virtual bot ##############################
-e = RlBotEnv(QvBot(3,12))  # sensor reads @ 360/3=120 degrees per reading
+e = RlBotEnv(QvBot(12,4))  # sensor reads @ 360/3=120 degrees per reading
                            # robot turns @ 360/12=30 degrees per turn
 
 # create the q-table
@@ -33,7 +33,7 @@ for n in range(1000):
 print(q)
 
 ########### Use the resulting q-table to run the physical bot ##################
-physical_bot = QHwBot_28byj(3,12)
+physical_bot = QHwBot_28byj(12,4)
 
 for n in range(100):
     done = False

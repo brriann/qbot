@@ -4,7 +4,7 @@ from collections import deque
 
 class Stepper:
 
-  halfStepSequence = (
+  HALF_STEP_SEQUENCE = (
     (1, 0, 0, 0),
     (1, 1, 0, 0),
     (0, 1, 0, 0),
@@ -14,14 +14,17 @@ class Stepper:
     (0, 0, 0, 1),
     (1, 0, 0, 1)
   )
+  CW = 1
+  CCW = -1
 
   delay = 0.0009
   degrees_per_step = 0.0875
 
-  def __init__(self, pins):
+  def __init__(self, pins, orientation=CW):
+    self.orientation = orientation
     self.target = 0
     self.pins = pins
-    self.dq = deque(Stepper.halfStepSequence)
+    self.dq = deque(Stepper.HALF_STEP_SEQUENCE)
     for pin in pins:
       GPIO.setup(pin, GPIO.OUT)
       GPIO.output(pin, 0)
@@ -29,14 +32,14 @@ class Stepper:
   def do_step(self):
     if self.has_steps():
       direction = self.get_direction()
-      self.dq.rotate(direction)
+      self.dq.rotate(direction * self.orientation)   # Steppers rotate CCW :/
       for i in range(4):
         GPIO.output(self.pins[i], self.dq[0][i])
 
 class SeekerStepper(Stepper):
 
-  def __init__(self, pins):
-    super().__init__(pins)
+  def __init__(self, pins, orientation=Stepper.CW):
+    super().__init__(pins, orientation)
     self.position = 0.0
 
   def has_steps(self):
