@@ -1,7 +1,9 @@
 # qbot
-Build a Self-Driving Q-Bot
+Build a Self-Driving Q-Bot using a Raspberry Pi Zero-W
 
-For a narrative description, see: https://medium.com/@michael_87060/build-a-self-driving-q-bot-6aa67ba60769
+Here is an overview of the project: https://medium.com/@michael_87060/build-a-self-driving-q-bot-6aa67ba60769
+
+(and here is an older repo that supports a BeagleBone Blue: https://github.com/jvon-challenges/qbot)
 
 The Q-bot is a small robot and associated software that uses machine learning (specifically Q learning) to learn how to complete a simple task (eg, seek the nearest object in its surroundings). The training can take place in a virtual or physical environment.
 
