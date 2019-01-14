@@ -5,14 +5,16 @@ Source code and design files for a self-driving Q-Bot, see:
 https://medium.com/@michael_87060/build-a-self-driving-q-bot-6aa67ba60769
 
 The Q-bot is a small robot and associated software that uses machine
-learning (specifically Q learning) to learn to seek the nearest physical object
-in its surroundings.
+learning (specifically Q learning) to learn how to seek the nearest object
+in its surroundings.  The robot can be virtual - simulated in software - or 
+physical.
 
-The robot uses a Raspberry Pi Zero W, a Sparkfun VL53L1X laser time-of-
+The build should cost <$50 with readily-available parts, and less if you salvage.  
+The physical robot uses a Raspberry Pi Zero W, a Sparkfun VL53L1X laser time-of-
 flight sensor, and 28byj geared stepper motors for movement.  Aside from 
 assorted nuts and bolts, a battery, and some wires, the only other required
-components can be 3D printed.  Links are provided below to the parts you will
-need, but they are example products or vendors only; feel free to substitute
+components can be 3D printed.  Links are provided below to the components you will
+need.  These are example products or vendors only; feel free to substitute
 parts wherever you like.  We are not endorsing, sponsored by,  or recommending
 any particular seller.
 
@@ -51,7 +53,7 @@ There are three example files included in this repo:
 - example_virtual.py will create an instance of a virtual Q-bot and it will train
 to seek a randomly-generated virtual obstacle.  This example does not require a physical
 q-bot; you can run this on your laptop or desktop and it will render the virtual bot
-and its obstacle.
+and its obstacle on screen using the python 'turtle'.
 
 - example-physical.py will attempt to train the physical q-bot by looking around for an
 obstacle and learn to move closer to it by trial and error, improving as it goes
