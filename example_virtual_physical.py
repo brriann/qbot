@@ -6,8 +6,8 @@ from qhwbot_28byj import *
 ########### Train virtually, then run physically ###############################
 
 ########### Train the q-table using a virtual bot ##############################
-e = RlBotEnv(QvBot(12,4))  # sensor reads @ 360/3=120 degrees per reading
-                           # robot turns @ 360/12=30 degrees per turn
+
+e = RlBotEnv(QvBot())         #Default params for virtual bot: 12 sensor sectors, 30 degrees each, 4 turn sectors
 
 # create the q-table
 q = np.random.rand(e.bot.observation_space(), e.bot.action_space())
@@ -18,7 +18,7 @@ alpha = 0.1     # learning rate (proportional weight of new v. old information)
 gamma = 0.9     # discount rate (relative value of future v. current reward)
 
 for n in range(1000):
-    state = e.reset()
+    state = e.reset(obstacle_count=1)
     done = False
     while not done:
         if np.random.random() < explore:   # explore the state-action space
@@ -33,7 +33,8 @@ for n in range(1000):
 print(q)
 
 ########### Use the resulting q-table to run the physical bot ##################
-physical_bot = QHwBot_28byj(12,4)
+
+physical_bot = QHwBot_28byj()
 
 for n in range(100):
     done = False

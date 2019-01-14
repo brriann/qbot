@@ -15,7 +15,7 @@ from distancesensor_28byj import *
 ################################################################################
 
 class QHwBot_28byj(QBot):
-    def __init__(self, sensor_sectors=4, degrees_per_sensor_sector=30, turn_sectors=4):
+    def __init__(self, sensor_sectors=12, degrees_per_sensor_sector=30, turn_sectors=4):
         super().__init__(sensor_sectors, degrees_per_sensor_sector, turn_sectors)
         GPIO.setmode(GPIO.BOARD)
         self.tuning_coeff = 1.555
@@ -42,7 +42,7 @@ class QHwBot_28byj(QBot):
             self.stepper2.set_target(rotation_degrees)
         self.motors.move()
 
-    def get_observation(self,_):   # second parameter applies only to virtual robots
+    def get_observation(self,_=None):   # second parameter applies only to virtual robots
         observation = []
         target = self.sensor_sectors//2 * self.degrees_per_sensor_sector
         for i in range(self.sensor_sectors):
