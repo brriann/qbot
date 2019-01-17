@@ -15,10 +15,13 @@ from obstacle import Obstacle
 
 class RlBotEnv:
 
+    MAX_ITERATIONS = 2000
+
     def __init__(self, bot):
         self.bot = bot        # could be a physical or virtual robot
 
     def reset(self, obstacle_count=0):
+        self.iterations = 0
         self.bot.reset()
         self.obstacles = Obstacle.make_obstacles(obstacle_count)
         obs = self.bot.get_observation(self.obstacles)
@@ -26,10 +29,11 @@ class RlBotEnv:
         return np.argmin(obs)                           # convert to discrete observation
 
     def step(self, action):
+        self.iterations += 1
         self.bot.move(action)
         obs = self.bot.get_observation(self.obstacles)
         reward = self.min_distance-min(obs) # reward = reduction in distance
         self.min_distance = min(obs)        # for use in next call to step()
         state = np.argmin(obs)              # convert to discrete state
-        done = min(obs) < self.bot.goal()   # find an object?
+        done = min(obs) < self.bot.goal() or self.iterations > RlBotEnv.MAX_ITERATIONS
         return state, reward, done

@@ -19,18 +19,23 @@ class Renderer:
         turtle.clear()
         self.count = -1
 
-    def render_reset(self, env):
+    def render_reset(self, env, raytrace=False):
         self.count += 1
-        self.render_backdrop(env.obstacles, env.bot)
+        self.render_backdrop(env.obstacles, env.bot, raytrace)
 
-    def render_backdrop(self, obstacles, bot):
+    def render_backdrop(self, obstacles, bot, raytrace):
         if self.count % self.n == 0:
             turtle.hideturtle()
             turtle.colormode(255)
             turtle.pencolor((np.random.randint(255),np.random.randint(255),np.random.randint(255)))
+            if raytrace:
+                self.render_raytrace(obstacles, bot)
             turtle.pensize(3+np.random.randint(5))
             for o in obstacles:
                 self.render_obstacle(o)
+            self.render_reset_turtle(bot)
+
+    def render_reset_turtle(self, bot):
             turtle.penup()
             turtle.goto(bot.x, bot.y)
             turtle.setheading(bot.heading)
@@ -45,23 +50,25 @@ class Renderer:
         turtle.pendown()
         turtle.circle(obstacle.radius)
 
-    def render_raytrace(self, env):
+    def render_raytrace(self, obstacles, bot):
         turtle.hideturtle()
-        turtle.goto(env.bot.x, env.bot.y)
-        turtle.showturtle()
-        for o in env.obstacles:
-            a,b,m,n = env.bot.bearings_to_ob(o)
-            d = env.bot.distance_to_ob(o)
-            env.render_reset_turtle()
+        turtle.penup()
+        turtle.pensize(1)
+        turtle.goto(bot.x, bot.y)
+        turtle.pendown()
+        for o in obstacles:
+            a,b,m,n = bot.bearings_to_ob(o)
+            d = bot.distance_to_ob(o)
+            self.render_reset_turtle(bot)
             turtle.pendown()
             turtle.goto(m[0], m[1])
-            env.render_reset_turtle()
+            self.render_reset_turtle(bot)
             turtle.pendown()
             turtle.goto(n[0], n[1])
-        env.render_reset_turtle()
+        self.render_reset_turtle(bot)
 
-    def render_step(self, environment):
-        if self.count % self.n == 0:
+    def render_step(self, environment, force=False):
+        if self.count % self.n == 0 or force:
             turtle.setheading(environment.bot.heading)
             turtle.pendown()
             turtle.goto(environment.bot.x, environment.bot.y)
