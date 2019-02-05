@@ -1,6 +1,3 @@
-from rlbotenv import *
-from qbot_virtual import *
-from renderer import Renderer
 
 ################################################################################
 #                                                                              #
@@ -8,7 +5,14 @@ from renderer import Renderer
 #                                                                              #
 ################################################################################
 
-# ! B Fost comment
+# Learning environment for Q-Bot
+from rlbotenv import *
+
+#  Virtual Robot
+from qbot_virtual import *
+
+# Utility class to render robot onscreen using Python turtle graphics.
+from renderer import Renderer
 
 e = RlBotEnv(QvBot(sensor_sectors=12,degrees_per_sensor_sector=30.0,turn_sectors=8))
 r = Renderer(100)
