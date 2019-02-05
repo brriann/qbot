@@ -8,6 +8,8 @@ from renderer import Renderer
 #                                                                              #
 ################################################################################
 
+# ! B Fost comment
+
 e = RlBotEnv(QvBot(sensor_sectors=12,degrees_per_sensor_sector=30.0,turn_sectors=8))
 r = Renderer(100)
 
